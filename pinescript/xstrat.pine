@@ -4,33 +4,15 @@
 //@version=6
 indicator(title = "xtrat", shorttitle = "xtrat", overlay=true)
 
-// ========== gex ==========
-// gex_GROUP = "Gamma Exposure Settings"
-// gex_show = input(false, title = "Show Gamma Exposure", tooltip = "Go to https://www.barchart.com/ (Gamma Exposure & Expected Move) for data", group = gex_GROUP, display = display.none)
-// gex_flip = input.float(0, "Gamma Flip Price Level")
-// gex_price_c1 = input.float(0, "Call Price Level Highest")
-// gex_price_p1 = input.float(0, "Put Price Level Lowest")
-// gex_expected_move1 = input.float(0, "Expected Move Price Level High")
-// gex_expected_move2 = input.float(0, "Expected Move Price Level Low")
-
-// get_level(val) => gex_show and val != 0 ? val : na
-
-// hline(get_level(gex_flip), "Gamma Flip Price Level", color = color.gray, linestyle = hline.style_dashed, linewidth = 2, display = gex_show ? display.all : display.none, editable = gex_show)
-// hline(get_level(gex_price_c1), "Call Price Level Highest", color = color.yellow, linestyle = hline.style_dashed, linewidth = 2, display = gex_show ? display.all : display.none, editable = gex_show)
-// hline(get_level(gex_price_p1), "Put Price Level Lowest", color = color.orange, linestyle = hline.style_dashed, linewidth = 2, display = gex_show ? display.all : display.none, editable = gex_show)
-// gex_em_1 = hline(get_level(gex_expected_move1), "Expected Move High", display = display.none, editable = false)
-// gex_em_2 = hline(get_level(gex_expected_move2), "Expected Move Low", display = display.none, editable = false)
-// fill(gex_em_1, gex_em_2, title = "Expected Move", color = color.rgb(44, 109, 230, 80), display = gex_show ? display.all : display.none, editable = gex_show)
-
 // ========== sma ==========
 sma_GROUP = "SMA Settings"
-sma1_show = input(false, title = "", inline = "sma1", group = sma_GROUP, display = display.none)
-sma1_length = input.int(defval = 20, title = "SMA1 Length", inline = "sma1", group = sma_GROUP, display = display.none)
-sma2_show = input(false, title = "", inline = "sma2", group = sma_GROUP, display = display.none)
-sma2_length = input.int(defval = 50, title = "SMA2 Length", inline = "sma2", group = sma_GROUP, display = display.none)
-sma3_show = input(true, title = "", inline = "sma3", group = sma_GROUP, display = display.none)
-sma3_length = input.int(defval = 200, title = "SMA3 Length", inline = "sma3", group = sma_GROUP, display = display.none)
-sma_src = input(title = "Source", defval = hlc3, group = sma_GROUP, display = display.none)
+sma1_show = input(false, title = "", inline = "sma1", group = sma_GROUP)
+sma1_length = input.int(defval = 20, title = "SMA1 Length", inline = "sma1", group = sma_GROUP)
+sma2_show = input(false, title = "", inline = "sma2", group = sma_GROUP)
+sma2_length = input.int(defval = 50, title = "SMA2 Length", inline = "sma2", group = sma_GROUP)
+sma3_show = input(true, title = "", inline = "sma3", group = sma_GROUP)
+sma3_length = input.int(defval = 200, title = "SMA3 Length", inline = "sma3", group = sma_GROUP)
+sma_src = input(title = "Source", defval = hlc3, group = sma_GROUP)
 
 sma1_value = ta.sma(sma_src, sma1_length)
 sma2_value = ta.sma(sma_src, sma2_length)
@@ -42,13 +24,13 @@ plot(sma3_value, title = "SMA3", color = color.purple, style = plot.style_circle
 
 // ========== ema ==========
 ema_GROUP = "EMA Settings"
-ema1_show = input(false, title = "", inline = "ema1", group = ema_GROUP, display = display.none)
-ema1_length = input.int(defval = 9, title = "EMA1 Length", inline = "ema1", group = ema_GROUP, display = display.none)
-ema2_show = input(false, title = "", inline = "ema2", group = ema_GROUP, display = display.none)
-ema2_length = input.int(defval = 20, title = "EMA2 Length", inline = "ema2", group = ema_GROUP, display = display.none)
-ema3_show = input(true, title = "", inline = "ema3", group = ema_GROUP, display = display.none)
-ema3_length = input.int(defval = 200, title = "EMA3 Length", inline = "ema3", group = ema_GROUP, display = display.none)
-ema_src = input(title = "Source", defval = hlc3, group = ema_GROUP, display = display.none)
+ema1_show = input(false, title = "", inline = "ema1", group = ema_GROUP)
+ema1_length = input.int(defval = 9, title = "EMA1 Length", inline = "ema1", group = ema_GROUP)
+ema2_show = input(false, title = "", inline = "ema2", group = ema_GROUP)
+ema2_length = input.int(defval = 20, title = "EMA2 Length", inline = "ema2", group = ema_GROUP)
+ema3_show = input(true, title = "", inline = "ema3", group = ema_GROUP)
+ema3_length = input.int(defval = 200, title = "EMA3 Length", inline = "ema3", group = ema_GROUP)
+ema_src = input(title = "Source", defval = hlc3, group = ema_GROUP)
 
 ema1_value = ta.ema(ema_src, ema1_length)
 ema2_value = ta.ema(ema_src, ema2_length)
@@ -60,9 +42,9 @@ plot(ema3_value, title = "EMA3", color = color.purple, display = ema3_show ? dis
 
 // ========== hma ==========
 hma_GROUP = "HMA Settings"
-hma_show = input(false, title = "", inline = "hma", group = hma_GROUP, display = display.none)
-hma_length = input.int(defval = 30, title = "HMA Length", inline = "hma", group = hma_GROUP, display = display.none)
-hma_src = input(title = "Source", defval = close, group = hma_GROUP, display = display.none)
+hma_show = input(false, title = "", inline = "hma", group = hma_GROUP)
+hma_length = input.int(defval = 30, title = "HMA Length", inline = "hma", group = hma_GROUP)
+hma_src = input(title = "Source", defval = close, group = hma_GROUP)
 
 wma_n2_value = 2 * ta.wma(hma_src, math.round(hma_length/2))
 wma_value = ta.wma(hma_src, hma_length)
@@ -81,11 +63,11 @@ plot(hma_value, color = hma_value > hma_neg_value ? color.rgb(242, 54, 70) : col
 
 // ========== vwap ==========
 vwap_GROUP = "VWAP Settings"
-vwap_tf_hide = input(true, title = "Hide VWAP on 30min or above", group = vwap_GROUP, display = display.none)
-vwap_show = input(true, title = "", inline = "vwap", group = vwap_GROUP, display = display.none)
-vwap_anchor = input.string(defval = "Session", title = "Anchor Period", inline = "vwap", options = ["Session", "Week", "Month", "Quarter", "Year", "Decade", "Century", "Earnings", "Dividends", "Splits"], group = vwap_GROUP, display = display.none)
-vwap_src = input(title = "Source", defval = hlc3, group = vwap_GROUP, display = display.none)
-vwap_offset = input.int(0, title = "Offset", group = vwap_GROUP, minval = 0, display = display.none)
+vwap_show = input(true, title = "Show VWAP", group = vwap_GROUP)
+vwap_tf_hide = input(true, title = "Hide VWAP on 30min or above", group = vwap_GROUP)
+vwap_anchor = input.string(defval = "Session", title = "Anchor Period", options = ["Session", "Week", "Month", "Quarter", "Year", "Decade", "Century", "Earnings", "Dividends", "Splits"], group = vwap_GROUP)
+vwap_src = input(title = "Source", defval = hlc3, group = vwap_GROUP)
+vwap_offset = input.int(0, title = "Offset", group = vwap_GROUP, minval = 0)
 
 cum_volume = ta.cum(volume)
 if barstate.islast and cum_volume == 0
@@ -115,9 +97,46 @@ if not (vwap_tf_hide and not (timeframe.in_seconds() < (30 * 60)))
 
 plot(vwap_value, title = "VWAP", color = color.white, offset = vwap_offset, display = vwap_show ? display.all : display.none, editable = vwap_show)
 
+// ========== consolidation ==========
+cons_GROUP = "Consolidation Settings"
+cons_show = input.bool(false, title = "Show Consolidation Range", group = cons_GROUP)
+cons_alert = input.bool(false, title = "Alert When Consolidation Range Formed", group = cons_GROUP)
+cons_length = input.int(defval = 6, title = "Min Consolidation Length", minval = 2, group = cons_GROUP)
+cons_tightness = input.float(defval = 3, title = "Tightness Threshold (ATR)", step = 0.1, group = cons_GROUP)
+
+cons_atr = ta.atr(14)
+cons_upper_bound = ta.highest(high, cons_length)
+cons_lower_bound = ta.lowest(low, cons_length)
+cons_range  = cons_upper_bound - cons_lower_bound
+
+is_consolidating = cons_range <= (cons_atr * cons_tightness)
+
+var int cons_count = 0
+var float cons_high = na
+var float cons_low = na
+var box cons_box = na
+
+if is_consolidating
+    cons_count += 1
+else
+    cons_count := 0
+
+if cons_count >= cons_length and cons_show
+    if cons_count == cons_length
+        cons_high := cons_upper_bound
+        cons_low  := cons_lower_bound
+        cons_box := box.new(bar_index - cons_length + 1, cons_high, bar_index, cons_low, bgcolor = color.new(color.olive, 90), border_color = color.olive, border_style = line.style_dashed)
+
+        if cons_alert
+            alert("Consolidation Range Formed!")
+    else
+        box.set_right(cons_box, bar_index)
+        box.set_top(cons_box, cons_upper_bound)
+        box.set_bottom(cons_box, cons_lower_bound)
+
 // ========== pivot high/low ==========
 phl_GROUP = "Pivot High/Low Settings"
-phl_show = input(false, title = "Show Pivot High/Low", group = phl_GROUP, display = display.none)
+phl_show = input(false, title = "Show Pivot High/Low", group = phl_GROUP)
 phl_left_length  = input.int(5, "Pivot Left Length", group = phl_GROUP)
 phl_right_length = input.int(5, "Pivot Right Length", group = phl_GROUP)
 
@@ -140,9 +159,8 @@ if not na(phl_low)
 isLH = not na(phl_high) and phl_high < phl_prev_high
 isHL = not na(phl_low)  and phl_low  > phl_prev_low
 
-// Plot labels on the chart
-plotshape(isLH, "LH", shape.labeldown, location.abovebar, color.red,   text="LH", textcolor = color.white, offset=-phl_right_length, display = phl_show ? display.all : display.none, editable = phl_show)
-plotshape(isHL, "HL", shape.labelup,   location.belowbar, color.green, text="HL", textcolor = color.white, offset=-phl_right_length, display = phl_show ? display.all : display.none, editable = phl_show)
+plotshape(isLH, "LH", shape.labeldown, location.abovebar, color.rgb(255, 82, 82, 50), text="LH", textcolor = color.white, offset=-phl_right_length, display = phl_show ? display.all : display.none, editable = phl_show)
+plotshape(isHL, "HL", shape.labelup, location.belowbar, color.rgb(76, 175, 79, 50), text="HL", textcolor = color.white, offset=-phl_right_length, display = phl_show ? display.all : display.none, editable = phl_show)
 
 // ========== atr sl ==========
 atrsl_GROUP = "ATR SL Settings"
@@ -164,7 +182,7 @@ plot(hlc3 + atrsl_value, title = "Short Position ATR SL", color = color.yellow, 
 
 // ========== session ==========
 session_GROUP = "Session settings"
-session_show = input(false, title = "Show Session First Candle High Low", group = session_GROUP, display = display.none)
+session_show = input(false, title = "Show Session First Candle High Low", group = session_GROUP)
 session_capture = input(5, title= "Capture Session Time (minutes)", group = session_GROUP)
 session_starttime = input.session("0930-0935", title = "Session StartTime", group = session_GROUP)
 
@@ -192,106 +210,14 @@ plot(session_tf_hide ? na : session_high, color = session_high[1] != session_hig
 plot(session_tf_hide ? na : session_low, color = session_low[1] != session_low ? na : color.red, title = "Session Low", display = session_show ? display.all : display.none, editable = session_show)
 
 // ========== heikin ashi ==========
-heikin_GROUP = "Heikin Ashi settings"
-heikin_show = input(false, title = "Show Heikin Ashi with Doji indicator", group = heikin_GROUP, display = display.none)
+// heikin_GROUP = "Heikin Ashi settings"
+// heikin_show = input(false, title = "Show Heikin Ashi with Doji indicator", group = heikin_GROUP)
 
-var float ha_open = na
-ha_close = (open + high + low + close) / 4
-ha_open  := na(ha_open[1]) ? (open + close) / 2 : (ha_open[1] + ha_close[1]) / 2
-ha_high  = math.max(high, math.max(ha_open, ha_close))
-ha_low   = math.min(low, math.min(ha_open, ha_close))
-plotcandle(ha_open, ha_high, ha_low, ha_close, title = "Heikin Ashi", color = ha_close >= ha_open ? color.rgb(8, 153, 129) : color.rgb(242, 54, 70), wickcolor = ha_close >= ha_open ? color.rgb(8, 153, 129) : color.rgb(242, 54, 70), display = heikin_show ? display.all : display.none, editable = heikin_show)
-doji = math.abs(ha_close - ha_open) <= (ha_high - ha_low) * 0.1
-plotshape(doji, title = "Doji Arrow", style = shape.xcross, location = location.abovebar, color = color.rgb(255, 235, 59), size = size.tiny, text = "", display = heikin_show ? display.all : display.none, editable = heikin_show)
-
-// ========== low volatility range breakout ==========
-lvr_GROUP = "LV Range Breakout Settings"
-lvr_show = input(false, title = "Show LV Range Breakout", group = lvr_GROUP, display = display.none)
-int lvr_length = input(50, "Volatility Length")
-int lvr_volatility_level = input.int(10, "Volatility Level", minval = 5, maxval = 20, tooltip = "Sensitivity of Volatility")
-float lvr_box_high = input.float(2., "Boxes High", step = 0.1)
-
-if lvr_show
-    color lvr_up = #23bdad
-    color lvr_dn = #b82372
-    float lvr_h = ta.highest(lvr_length)
-    float lvr_l = ta.lowest(lvr_length)
-    float lvr_atr = ta.atr(200)*lvr_box_high
-    var lvr_count_activity = int(na)
-    var lvr_box = box(na)
-    var lvr_line = line(na)
-    var lvr_prob_up = int(na)
-    var lvr_prob_dn = int(na)
-    var lvr_check = bool(na)
-    bool lvr_lv_condition = ta.change(lvr_l[1] == lvr_l) or ta.change(lvr_h[1] == lvr_h)
-
-    if not lvr_lv_condition
-        lvr_count_activity += 1
-
-    if lvr_lv_condition
-        lvr_count_activity := 0
-
-    if bar_index == 201
-        lvr_check := true
-
-    if (lvr_count_activity == lvr_volatility_level) and lvr_check
-        lvr_box  := box.new(bar_index-lvr_volatility_level, high + lvr_atr, bar_index + 40, low - lvr_atr,
-                            bgcolor = na, 
-                            border_color = chart.fg_color)
-        half   = (lvr_box.get_bottom() + lvr_box.get_top()) / 2
-
-        lvr_line := line.new(bar_index-lvr_volatility_level, half, bar_index+40, half, color = chart.fg_color)
-        lvr_check := false
-
-    if hl2 > lvr_line.get_y1()
-        lvr_prob_up += 1
-
-    if hl2 < lvr_line.get_y1()
-        lvr_prob_dn += 1
-
-    if ta.crossunder(close, lvr_box.get_bottom())
-        lvr_prob_up := 0
-        lvr_prob_dn := 0
-        lvr_check   := true
-
-        label.new(bar_index, lvr_box.get_top(), "Break Dn", xloc.bar_index, yloc.price, #00000000, 
-                    label.style_label_down, chart.fg_color)
-        lvr_box.set_right(bar_index)
-        lvr_box.set_border_style(line.style_dashed)
-        lvr_box.set_border_color(lvr_dn)
-        line.delete(lvr_line[1])
-
-        lvr_box := na
-
-    if  ta.crossover(close, lvr_box.get_top())
-        lvr_prob_up := 0
-        lvr_prob_dn := 0
-        lvr_check   := true
-
-        label.new(bar_index, lvr_box.get_bottom(), "Break Up", xloc.bar_index, yloc.price, #00000000, 
-                    label.style_label_up, chart.fg_color)
-
-        lvr_box.set_right(bar_index)
-        lvr_box.set_border_style(line.style_dashed)
-        lvr_box.set_border_color(lvr_up)
-        line.delete(lvr_line[1])
-
-        lvr_box := na
-
-    if barstate.islast
-        label.delete(label.new(bar_index+40, lvr_box.get_bottom(), str.tostring(lvr_prob_dn), 
-                    xloc.bar_index, 
-                    yloc.price, 
-                    #00000000, 
-                    label.style_label_up,  
-                    lvr_prob_dn > lvr_prob_up ? lvr_dn : chart.fg_color)[1])
-
-        label.delete(label.new(bar_index+40, lvr_box.get_top(), str.tostring(lvr_prob_up), 
-                    xloc.bar_index,
-                    yloc.price, 
-                    #00000000, 
-                    label.style_label_down, 
-                    lvr_prob_dn < lvr_prob_up ? lvr_up : chart.fg_color)[1])
-
-    lvr_box.set_right(bar_index+40)
-    lvr_line.set_x2(bar_index+40)
+// var float ha_open = na
+// ha_close = (open + high + low + close) / 4
+// ha_open  := na(ha_open[1]) ? (open + close) / 2 : (ha_open[1] + ha_close[1]) / 2
+// ha_high  = math.max(high, math.max(ha_open, ha_close))
+// ha_low   = math.min(low, math.min(ha_open, ha_close))
+// plotcandle(ha_open, ha_high, ha_low, ha_close, title = "Heikin Ashi", color = ha_close >= ha_open ? color.rgb(8, 153, 129) : color.rgb(242, 54, 70), wickcolor = ha_close >= ha_open ? color.rgb(8, 153, 129) : color.rgb(242, 54, 70), display = heikin_show ? display.all : display.none, editable = heikin_show)
+// doji = math.abs(ha_close - ha_open) <= (ha_high - ha_low) * 0.1
+// plotshape(doji, title = "Doji Arrow", style = shape.xcross, location = location.abovebar, color = color.rgb(255, 235, 59), size = size.tiny, text = "", display = heikin_show ? display.all : display.none, editable = heikin_show)
