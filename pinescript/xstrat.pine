@@ -18,8 +18,8 @@ sma1_value = ta.sma(sma_src, sma1_length)
 sma2_value = ta.sma(sma_src, sma2_length)
 sma3_value = ta.sma(sma_src, sma3_length)
 
-plot(sma1_value, title = "SMA1", color = color.aqua, style = plot.style_circles, display = sma1_show ? display.all : display.none, editable = sma1_show)
-plot(sma2_value, title = "SMA2", color = color.blue, style = plot.style_circles, display = sma2_show ? display.all : display.none, editable = sma2_show)
+plot(sma1_value, title = "SMA1", color = color.blue, style = plot.style_circles, display = sma1_show ? display.all : display.none, editable = sma1_show)
+plot(sma2_value, title = "SMA2", color = color.orange, style = plot.style_circles, display = sma2_show ? display.all : display.none, editable = sma2_show)
 plot(sma3_value, title = "SMA3", color = color.purple, style = plot.style_circles, display = sma3_show ? display.all : display.none, editable = sma3_show)
 
 // ========== ema ==========
@@ -36,8 +36,8 @@ ema1_value = ta.ema(ema_src, ema1_length)
 ema2_value = ta.ema(ema_src, ema2_length)
 ema3_value = ta.ema(ema_src, ema3_length)
 
-plot(ema1_value, title = "EMA1", color = color.aqua, display = ema1_show ? display.all : display.none, editable = ema1_show)
-plot(ema2_value, title = "EMA2", color = color.blue, display = ema2_show ? display.all : display.none, editable = ema2_show)
+plot(ema1_value, title = "EMA1", color = color.blue, display = ema1_show ? display.all : display.none, editable = ema1_show)
+plot(ema2_value, title = "EMA2", color = color.orange, display = ema2_show ? display.all : display.none, editable = ema2_show)
 plot(ema3_value, title = "EMA3", color = color.purple, display = ema3_show ? display.all : display.none, editable = ema3_show)
 
 // ========== hma ==========
@@ -182,13 +182,21 @@ plot(hlc3 + atrsl_value, title = "Short Position ATR SL", color = color.yellow, 
 
 // ========== session ==========
 session_GROUP = "Session settings"
-session_show = input(false, title = "Show Session First Candle High Low", group = session_GROUP)
-session_capture = input(5, title= "Capture Session Time (minutes)", group = session_GROUP)
-session_starttime = input.session("0930-0935", title = "Session StartTime", group = session_GROUP)
+session_hl_show = input(false, title = "Show daily H/L", group = session_GROUP)
+session_orb_show = input(false, title = "", inline = "orb", group = session_GROUP)
+session_orb_range = input.session("0930-0935", title = "Show H/L of ? min(s)", inline = "orb", group = session_GROUP)
 
-session_time = time(timeframe.period, session_starttime + ":1234567")
 session_tf_hide = not (timeframe.in_seconds() < (30 * 60))
-in_session = not na(session_time)
+
+session_prev_high = request.security(syminfo.tickerid, "1D", high[1], lookahead = barmerge.lookahead_on)
+session_prev_low = request.security(syminfo.tickerid, "1D", low[1], lookahead = barmerge.lookahead_on)
+
+if session_hl_show and not session_tf_hide
+    line.new(x1 = bar_index, y1 = session_prev_high, x2 = bar_index + 1, y2 = session_prev_high, color = color.blue, extend = extend.both)
+    line.new(x1 = bar_index, y1 = session_prev_low, x2 = bar_index + 1, y2 = session_prev_low, color = color.blue, extend = extend.both)
+
+session_orb_time = time(timeframe.period, session_orb_range + ":1234567")
+in_session = not na(session_orb_time)
 is_first = in_session and not in_session[1]
 
 session_high = float(na)
@@ -206,8 +214,8 @@ if high > session_high and in_session
 if low < session_low and in_session
     session_low := low
 
-plot(session_tf_hide ? na : session_high, color = session_high[1] != session_high ? na : color.green, title = "Session High", display = session_show ? display.all : display.none, editable = session_show)
-plot(session_tf_hide ? na : session_low, color = session_low[1] != session_low ? na : color.red, title = "Session Low", display = session_show ? display.all : display.none, editable = session_show)
+plot(session_tf_hide ? na : session_high, color = session_high[1] != session_high ? na : color.green, title = "Session High", display = session_orb_show ? display.all : display.none, editable = session_orb_show)
+plot(session_tf_hide ? na : session_low, color = session_low[1] != session_low ? na : color.red, title = "Session Low", display = session_orb_show ? display.all : display.none, editable = session_orb_show)
 
 // ========== heikin ashi ==========
 // heikin_GROUP = "Heikin Ashi settings"
