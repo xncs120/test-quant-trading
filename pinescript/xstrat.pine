@@ -182,40 +182,53 @@ plot(hlc3 + atrsl_value, title = "Short Position ATR SL", color = color.yellow, 
 
 // ========== session ==========
 session_GROUP = "Session settings"
-session_hl_show = input(false, title = "Show daily H/L", group = session_GROUP)
-session_orb_show = input(false, title = "", inline = "orb", group = session_GROUP)
-session_orb_range = input.session("0930-0935", title = "Show H/L of ? min(s)", inline = "orb", group = session_GROUP)
-
+session_prevhl_show = input(false, title = "Show previous day H/L", group = session_GROUP)
+session_orbhl_show = input(false, title = "", inline = "orb", group = session_GROUP)
+session_orbhl_range = input.session("0930-0935", title = "Show x min(s) orb H/L", inline = "orb", group = session_GROUP)
 session_tf_hide = not (timeframe.in_seconds() < (30 * 60))
 
-session_prev_high = request.security(syminfo.tickerid, "1D", high[1], lookahead = barmerge.lookahead_on)
-session_prev_low = request.security(syminfo.tickerid, "1D", low[1], lookahead = barmerge.lookahead_on)
+session_is_new_day = ta.change(time("1D")) != 0
+[session_prev_high, session_prev_low] = request.security(syminfo.tickerid, "1D", [high[1], low[1]], lookahead = barmerge.lookahead_on)
+var line session_prev_high_line = line.new(na, na, na, na, color=color.blue, style=line.style_solid, extend=extend.both)
+var line session_prev_low_line = line.new(na, na, na, na, color=color.blue, style=line.style_solid, extend=extend.both)
 
-if session_hl_show and not session_tf_hide
-    line.new(x1 = bar_index, y1 = session_prev_high, x2 = bar_index + 1, y2 = session_prev_high, color = color.blue, extend = extend.both)
-    line.new(x1 = bar_index, y1 = session_prev_low, x2 = bar_index + 1, y2 = session_prev_low, color = color.blue, extend = extend.both)
+if session_prevhl_show and not session_tf_hide
+    line.set_y1(session_prev_high_line, session_prev_high)
+    line.set_y2(session_prev_high_line, session_prev_high)
+    line.set_y1(session_prev_low_line, session_prev_low)
+    line.set_y2(session_prev_low_line, session_prev_low)
 
-session_orb_time = time(timeframe.period, session_orb_range + ":1234567")
-in_session = not na(session_orb_time)
-is_first = in_session and not in_session[1]
-
-session_high = float(na)
-session_low = float(na)
-
-if is_first
-    session_high := high
-    session_low := low
+    line.set_x1(session_prev_high_line, bar_index - 1)
+    line.set_x2(session_prev_high_line, bar_index)
+    line.set_x1(session_prev_low_line, bar_index - 1)
+    line.set_x2(session_prev_low_line, bar_index)
 else
-    session_high := session_high[1]
-    session_low := session_low[1]
+    line.set_xy1(session_prev_high_line, na, na)
+    line.set_xy2(session_prev_high_line, na, na)
+    line.set_xy1(session_prev_low_line, na, na)
+    line.set_xy2(session_prev_low_line, na, na)
 
-if high > session_high and in_session
-    session_high := high
-if low < session_low and in_session
-    session_low := low
+session_orbhl_time = time(timeframe.period, session_orbhl_range + ":1234567")
+session_is_today = not na(session_orbhl_time)
+session_is_first = session_is_today and not session_is_today[1]
 
-plot(session_tf_hide ? na : session_high, color = session_high[1] != session_high ? na : color.green, title = "Session High", display = session_orb_show ? display.all : display.none, editable = session_orb_show)
-plot(session_tf_hide ? na : session_low, color = session_low[1] != session_low ? na : color.red, title = "Session Low", display = session_orb_show ? display.all : display.none, editable = session_orb_show)
+session_orb_high = float(na)
+session_orb_low = float(na)
+
+if session_is_first
+    session_orb_high := high
+    session_orb_low := low
+else
+    session_orb_high := session_orb_high[1]
+    session_orb_low := session_orb_low[1]
+
+if high > session_orb_high and session_is_today
+    session_orb_high := high
+if low < session_orb_low and session_is_today
+    session_orb_low := low
+
+plot(session_tf_hide ? na : session_orb_high, color = session_orb_high[1] != session_orb_high ? na : color.green, title = "Session High", display = session_orbhl_show ? display.all : display.none, editable = session_orbhl_show)
+plot(session_tf_hide ? na : session_orb_low, color = session_orb_low[1] != session_orb_low ? na : color.red, title = "Session Low", display = session_orbhl_show ? display.all : display.none, editable = session_orbhl_show)
 
 // ========== heikin ashi ==========
 // heikin_GROUP = "Heikin Ashi settings"
